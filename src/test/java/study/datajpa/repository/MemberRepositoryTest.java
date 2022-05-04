@@ -10,6 +10,8 @@ import study.datajpa.Entity.Member;
 import study.datajpa.Entity.Team;
 import study.datajpa.dto.MemberDto;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -93,6 +95,25 @@ class MemberRepositoryTest {
             System.out.println(dto.getTeamName());
         }
 
+    }
+
+    //컬렉션 파라미터 바인딩
+    @Test
+    public void 컬렉션파라미터바인딩() {
+        Member member1 = new Member("AAA", 10);
+        Member member2 = new Member("BBB", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<String> names = new ArrayList<>();
+        names.add("AAA");
+        names.add("BBB");
+        names.add("CCC");
+
+        List<Member> byNames = memberRepository.findByNames(names);
+        for (Member byName : byNames) {
+            System.out.println(byName.getUserName());
+        }
     }
 
 
