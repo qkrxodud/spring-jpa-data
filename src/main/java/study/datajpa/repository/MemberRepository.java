@@ -6,8 +6,10 @@ import org.springframework.data.repository.query.Param;
 import study.datajpa.Entity.Member;
 import study.datajpa.dto.MemberDto;
 
+import javax.swing.text.html.Option;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     public List<Member> findByUserNameAndAgeGreaterThan(String userName, int age);
@@ -23,6 +25,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m from Member m where m.userName in :names")
     List<Member> findByNames(@Param("names") Collection<String> names);
+
+    //컬렌션 조회
+    List<Member> findMemberListByUserName(String name);
+
+    //단건 조회
+    Member findMemberByUserName(String name);
+
+    //단건 Optional 조회
+    Optional<Member> findOptionalMemberByUserName(String name);
 }
 
 
