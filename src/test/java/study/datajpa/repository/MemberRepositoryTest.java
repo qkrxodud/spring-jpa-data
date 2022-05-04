@@ -13,6 +13,7 @@ import study.datajpa.dto.MemberDto;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -116,6 +117,25 @@ class MemberRepositoryTest {
         }
     }
 
+
+    @Test
+    public void 반환타입테스트() {
+        Member member1 = new Member("AAA", 10);
+        memberRepository.save(member1);
+
+        //컬렌션 조회
+        List<Member> members = memberRepository.findMemberListByUserName("AAA");
+        for (Member member : members) {
+            assertThat(member).isEqualTo(member1);
+        }
+        //단건 조회
+        Member member = memberRepository.findMemberByUserName("AAA");
+        assertThat(member).isEqualTo(member1);
+        //단건 Optional 조회
+        Optional<Member> Member = memberRepository.findOptionalMemberByUserName("AAA");
+        assertThat(Member.get()).isEqualTo(member1);
+
+    }
 
 
 }
