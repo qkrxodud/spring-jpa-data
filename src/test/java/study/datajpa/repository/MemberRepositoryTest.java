@@ -155,8 +155,14 @@ class MemberRepositoryTest {
         //when
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "userName"));
         Page<Member> page = memberRepository.findByAge(age, pageRequest);
+        page.map(m -> new MemberDto(m.getId(), m.getUserName(), null));
+
+        List<Member> top2By = memberRepository.findTop2By();
 
         //then
+        for (Member member : top2By) {
+            System.out.println("top2 >>>> " + member.getUserName());
+        }
         List<Member> content = page.getContent(); // 조회된 데이터
         assertThat(content.size()).isEqualTo(3); // 조회된 데이터 수
         assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수

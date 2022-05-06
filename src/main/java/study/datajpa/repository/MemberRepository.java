@@ -57,6 +57,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query(value = "select m from Member m", countQuery = "select count(m.userName) from Member m")
     Page<Member> findMemberAllCountBy(Pageable pageable);
+
+    List<Member> findTop2By();
 }
 
 
