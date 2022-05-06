@@ -23,11 +23,11 @@ public class MemberJpaRepository {
     }
 
     public List<Member> findAll() {
-        return em.createQuery("Select m from Member m" , Member.class)
+        return em.createQuery("Select m from Member m", Member.class)
                 .getResultList();
     }
 
-    public Optional<Member> findById (Long memberId) {
+    public Optional<Member> findById(Long memberId) {
         Member member = em.find(Member.class, memberId);
         return Optional.ofNullable(member);
     }
@@ -59,8 +59,18 @@ public class MemberJpaRepository {
 
     // 총 카운트
     public long totalCount(int age) {
-        return  em.createQuery("select count(m) from Member m where m.age = :age ", Long.class)
+        return em.createQuery("select count(m) from Member m where m.age = :age ", Long.class)
                 .setParameter("age", age)
                 .getSingleResult();
+    }
+
+    // 벌크성 수정 쿼리
+    public int bulkAgePlus(int age) {
+        int result = em.createQuery(
+                        " update Member m set m.age = m.age + 1 " +
+                                " where m.age <= : age")
+                .setParameter("age", age)
+                .executeUpdate();
+        return result;
     }
 }
