@@ -1,5 +1,9 @@
 package study.datajpa.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,6 +38,22 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //단건 Optional 조회
     Optional<Member> findOptionalMemberByUserName(String name);
+
+    /**
+     * Page 사용 예제 정의코드
+     */
+    Page<Member> findByAge(int age, Pageable pageable);
+
+    //count 쿼리 사용
+    Page<Member> findMemberPageByUserName(String name, Pageable pageable);
+
+    //count 쿼리 사용안함
+    Slice<Member> findMemberSliceByUserName(String name, Pageable pageable);
+
+    //count 쿼리 사용 안함
+    List<Member> findMemberListByUserName(String name, Pageable pageable);
+
+    List<Member> findByUserName(String name, Sort sort);
 }
 
 
