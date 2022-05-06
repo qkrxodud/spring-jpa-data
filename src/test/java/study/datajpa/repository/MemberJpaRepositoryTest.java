@@ -94,4 +94,21 @@ class MemberJpaRepositoryTest {
         //then
         assertThat(members.size()).isEqualTo(3);
     }
+
+    @Test
+    public void 벌크업데이트테스트() {
+        //given
+        jpaRepository.save(new Member("member1", 10));
+        jpaRepository.save(new Member("member1", 19));
+        jpaRepository.save(new Member("member1", 20));
+        jpaRepository.save(new Member("member1", 21));
+        jpaRepository.save(new Member("member1", 40));
+
+        //when
+        int resultCount = jpaRepository.bulkAgePlus(20);
+
+        //then
+        assertThat(resultCount).isEqualTo(3);
+
+    }
 }
