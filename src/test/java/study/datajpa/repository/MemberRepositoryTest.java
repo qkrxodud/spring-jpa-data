@@ -4,12 +4,16 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.Entity.Member;
 import study.datajpa.Entity.Team;
 import study.datajpa.dto.MemberDto;
 
+import java.awt.print.Pageable;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +24,6 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @Rollback(value = false)
-
 class MemberRepositoryTest {
 
     @Autowired
@@ -71,7 +74,7 @@ class MemberRepositoryTest {
 
     //메소드 쿼리문 테스트
     @Test
-    public void 메소드쿼리테스트 () {
+    public void 메소드쿼리테스트() {
         Member member1 = new Member("member1", 10);
         Member member2 = new Member("member2", 20);
         memberRepository.save(member1);
@@ -137,5 +140,30 @@ class MemberRepositoryTest {
 
     }
 
+    @Test
+    public void 페이징확인() throws Exception {
+
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 10));
+        memberRepository.save(new Member("member3", 10));
+        memberRepository.save(new Member("member4", 10));
+        memberRepository.save(new Member("member5", 10));
+
+        int age = 10;
+
+        //when
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "userName"));
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        //then
+        List<Member> content = page.getContent(); // 조회된 데이터
+        assertThat(content.size()).isEqualTo(3); // 조회된 데이터 수
+        assertThat(page.getTotalElements()).isEqualTo(5); //전체 데이터 수
+        assertThat(page.getNumber()).isEqualTo(0); //페이지 번호
+        assertThat(page.getTotalPages()).isEqualTo(2); // 전체 페이지 번호
+        assertThat(page.isFirst()).isTrue(); // 첫번째 항목인가?
+        assertThat(page.hasNext()).isTrue(); // 다음 페이지가 있는가?
+    }
 
 }
