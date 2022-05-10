@@ -1,13 +1,17 @@
 package study.datajpa.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
 import study.datajpa.Entity.Member;
 import study.datajpa.repository.MemberRepository;
 
-@Controller
+import javax.annotation.PostConstruct;
+
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberRepository memberRepository;
@@ -22,5 +26,20 @@ public class MemberController {
     public String findMember2(@PathVariable("id") Member member) {
         Member findMember = memberRepository.findById(member.getId()).get();
         return findMember.getUserName();
+    }
+
+    @GetMapping("/members")
+    public Page<Member> list(Pageable pageable) {
+        //PageRequest pageRequest = PageRequest.of(0,3, Sort.by(Sort.Direction.DESC, "userName"));
+        Page<Member> page = memberRepository.findAll(pageable);
+        return page;
+    }
+
+    @PostConstruct
+    public void init() {
+        memberRepository.save(new Member("userA"));
+        memberRepository.save(new Member("userB"));
+        memberRepository.save(new Member("userC"));
+        memberRepository.save(new Member("userD"));
     }
 }
