@@ -53,6 +53,27 @@ class MemberTest {
         }
     }
 
+//    @Test
+//    public void JpaEventBaseEntity() throws Exception {
+//        //given
+//        Member member = new Member("member1");
+//        memberRepository.save(member); //@PrePersist
+//
+//        Thread.sleep(100);
+//        member.setUserName("member2");
+//
+//        em.flush();
+//        em.clear();
+//
+//        //when
+//        Member findMember = memberRepository.findById(member.getId()).get();
+//
+//        //then
+//        System.out.println("findMember.createdDate = " + findMember.getCreateDateTime());
+//        System.out.println("findMember.updateDate = " + findMember.getUpdateDateTime());
+//
+//    }
+
     @Test
     public void JpaEventBaseEntity() throws Exception {
         //given
@@ -69,8 +90,11 @@ class MemberTest {
         Member findMember = memberRepository.findById(member.getId()).get();
 
         //then
-        System.out.println("findMember.createdDate = " + findMember.getCreateDateTime());
-        System.out.println("findMember.updateDate = " + findMember.getUpdateDateTime());
+        System.out.println("findMember.createdDate = " + findMember.getCreateDate());
+        System.out.println("findMember.updateDate = " + findMember.getLastModifiedDate());
+
+        System.out.println("findMember.updateDate = " + findMember.getCreateBy());
+        System.out.println("findMember.updateDate = " + findMember.getLastModifiedBy());
 
     }
 
