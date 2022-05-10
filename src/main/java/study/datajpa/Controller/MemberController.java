@@ -35,6 +35,13 @@ public class MemberController {
         return page;
     }
 
+    @GetMapping(value = "/members_page")
+    public Page<Member> list2(@PageableDefault(size = 12, sort = "userName",
+                        direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Member> page = memberRepository.findAll(pageable);
+        return page;
+    }
+
     @PostConstruct
     public void init() {
         memberRepository.save(new Member("userA"));
